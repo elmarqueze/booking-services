@@ -1,26 +1,25 @@
+// Accordion.js
 import React, { useState, useEffect } from "react";
 
-const Accordion = ({ title, description }) => {
+const Accordion = ({ title, description, onSelectionChange }) => {
   const [accordionOpen, setAccordionOpen] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
 
-  // Load selected items from localStorage when mounting component
   useEffect(() => {
-    const selectedItems =
-      JSON.parse(localStorage.getItem("selectedItems")) || [];
+    const selectedItems = JSON.parse(localStorage.getItem("selectedItems")) || [];
     const isCurrentlySelected = selectedItems.some(
       (item) => item.title === title && item.description === description
     );
     setIsSelected(isCurrentlySelected);
   }, [title, description]);
 
-  // Handle click on select button
   const handleSelectionToggle = () => {
-    setIsSelected(!isSelected);
-    updateSelectedItems(!isSelected);
+    const newSelected = !isSelected;
+    setIsSelected(newSelected);
+    updateSelectedItems(newSelected);
+    onSelectionChange(); // Llama a la función de devolución de llamada en Categories
   };
 
-  // Update selected items in localStorage
   const updateSelectedItems = (isSelected) => {
     let selectedItems = JSON.parse(localStorage.getItem("selectedItems")) || [];
 
